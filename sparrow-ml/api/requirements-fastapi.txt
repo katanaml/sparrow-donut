@@ -1,0 +1,10 @@
+transformers
+datasets
+sentencepiece
+tensorboard
+pytorch-lightning
+Pillow
+donut-python
+fastapi==0.96.0
+uvicorn[standard]
+python-multipart
