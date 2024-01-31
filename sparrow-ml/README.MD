@@ -205,4 +205,4 @@ https://katanaml-org-sparrow-ml.hf.space/api/v1/sparrow-ml/docs
 
 ## License
 
-Licensed under the Apache License, Version 2.0. Copyright 2020-2023 Katana ML, Andrej Baranovskij. [Copy of the license](https://github.com/katanaml/sparrow/blob/main/LICENSE).
+Licensed under the Apache License, Version 2.0. Copyright 2020-2023 Katana ML, Andrej Baranovskij. [Copy of the license](https://github.com/katanaml/sparrow-donut/blob/main/LICENSE).
