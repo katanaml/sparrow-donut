@@ -6,23 +6,23 @@
 
 #### Dashboard UI:
 
-![Sparrow Dashboard](https://github.com/katanaml/sparrow/blob/main/sparrow-ui/donut/assets/dashboard.png)
+![Sparrow Dashboard](https://github.com/katanaml/sparrow-donut/blob/main/sparrow-ui/assets/dashboard.png)
 
 #### Annotation UI:
 
-![Sparrow Annotation](https://github.com/katanaml/sparrow/blob/main/sparrow-ui/donut/assets/annotation.png)
+![Sparrow Annotation](https://github.com/katanaml/sparrow-donut/blob/main/sparrow-ui/assets/annotation.png)
 
 #### Inference UI:
 
-![Sparrow Inference](https://github.com/katanaml/sparrow/blob/main/sparrow-ui/donut/assets/inference.png)
+![Sparrow Inference](https://github.com/katanaml/sparrow-donut/blob/main/sparrow-ui/assets/inference.png)
 
 #### Review UI:
 
-![Sparrow Review](https://github.com/katanaml/sparrow/blob/main/sparrow-ui/donut/assets/review.png)
+![Sparrow Review](https://github.com/katanaml/sparrow-donut/blob/main/sparrow-ui/assets/review.png)
 
 #### Labels/Groups CRUD UI:
 
-![Sparrow CRUD](https://github.com/katanaml/sparrow/blob/main/sparrow-ui/donut/assets/crud.png)
+![Sparrow CRUD](https://github.com/katanaml/sparrow-donut/blob/main/sparrow-ui/assets/crud.png)
 
 ## Instructions
 
@@ -95,4 +95,4 @@ https://katanaml-org-sparrow-ui.hf.space
 
 ## License
 
-Licensed under the Apache License, Version 2.0. Copyright 2020-2023 Katana ML, Andrej Baranovskij. [Copy of the license](https://github.com/katanaml/sparrow/blob/main/LICENSE).
+Licensed under the Apache License, Version 2.0. Copyright 2020-2023 Katana ML, Andrej Baranovskij. [Copy of the license](https://github.com/katanaml/sparrow-donut/blob/main/LICENSE).
