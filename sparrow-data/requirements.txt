@@ -2,7 +2,8 @@ pdf2image==1.16.2
 torch==1.13.1
 torchvision
 torchaudio
-datasets==2.10.1
+datasets>=2.12.0
+huggingface_hub>=0.14.1
 fastapi==0.96.0
 python-doctr==0.6.0
 paddleocr==2.7.0.3
