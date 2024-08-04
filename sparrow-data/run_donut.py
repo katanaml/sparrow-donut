@@ -1,54 +1,60 @@
+# run_donut.py
+
+from pathlib import Path
+import shutil
+import random
 from tools.donut.metadata_generator import DonutMetadataGenerator
 from tools.donut.dataset_generator import DonutDatasetGenerator
-from pathlib import Path
-import os
-import shutil
 
+def copy_files(src_dir, dst_dir, file_ext):
+    for file in Path(src_dir).glob(f'*.{file_ext}'):
+        shutil.copy(file, dst_dir)
 
 def main():
-    # define the source and destination directory
+    # Define source and destination directories
     src_dir_json = '../sparrow-ui/docs/json/key'
     src_dir_img = '../sparrow-ui/docs/images'
-    dst_dir_json = 'docs/models/donut/data/key'
-    dst_dir_img = 'docs/models/donut/data/key/img'
+    base_path = Path('docs/models/donut/data')
+    dst_dir_json = base_path / 'key'
+    dst_dir_img = base_path / 'img'
 
-    # copy JSON files from src to dst
-    files = os.listdir(src_dir_json)
-    for f in files:
-        src_file = os.path.join(src_dir_json, f)
-        dst_file = os.path.join(dst_dir_json, f)
-        shutil.copy(src_file, dst_file)
+    # Create destination directories if they don't exist
+    dst_dir_json.mkdir(parents=True, exist_ok=True)
+    dst_dir_img.mkdir(parents=True, exist_ok=True)
 
-    # copy images from src to dst
-    files = os.listdir(src_dir_img)
-    for f in files:
-        # copy img file, only if file with sane name exists in dst_dir_json
-        if os.path.isfile(os.path.join(dst_dir_json, f[:-4] + '.json')):
-            src_file = os.path.join(src_dir_img, f)
-            dst_file = os.path.join(dst_dir_img, f)
-            shutil.copy(src_file, dst_file)
+    # Copy JSON files and images
+    copy_files(src_dir_json, dst_dir_json, 'json')
+    copy_files(src_dir_img, dst_dir_img, 'jpg')
 
-    # Convert to Donut format
-    base_path = 'docs/models/donut/data'
-    data_dir_path = Path(base_path).joinpath("key")
-    files = data_dir_path.glob("*.json")
-    files_list = [file for file in files]
-    # split files_list array into 3 parts, 85% train, 10% validation, 5% test
-    train_files_list = files_list[:int(len(files_list) * 0.85)]
-    print("Train set size:", len(train_files_list))
-    validation_files_list = files_list[int(len(files_list) * 0.85):int(len(files_list) * 0.95)]
-    print("Validation set size:", len(validation_files_list))
-    test_files_list = files_list[int(len(files_list) * 0.95):]
-    print("Test set size:", len(test_files_list))
+    # Prepare files for Donut format
+    json_files = list(dst_dir_json.glob("*.json"))
+    random.shuffle(json_files)
 
+    # Split files into train, validation, and test sets
+    total_files = len(json_files)
+    train_size = int(total_files * 0.8)
+    val_size = int(total_files * 0.1)
+    train_files = json_files[:train_size]
+    val_files = json_files[train_size:train_size+val_size]
+    test_files = json_files[train_size+val_size:]
+
+    print(f"Train set size: {len(train_files)}")
+    print(f"Validation set size: {len(val_files)}")
+    print(f"Test set size: {len(test_files)}")
+
+    # Generate metadata
     metadata_generator = DonutMetadataGenerator()
-    metadata_generator.generate(base_path, train_files_list, "train")
-    metadata_generator.generate(base_path, validation_files_list, "validation")
-    metadata_generator.generate(base_path, test_files_list, "test")
+    for split, files in [("train", train_files), ("validation", val_files), ("test", test_files)]:
+        metadata_generator.generate(base_path, files, split)
 
     # Generate dataset
     dataset_generator = DonutDatasetGenerator()
-    dataset_generator.generate(base_path)
+    datasets = dataset_generator.generate(base_path)
+
+    if datasets:
+        print("Datasets generated successfully")
+    else:
+        print("Failed to generate datasets")
 
 if __name__ == '__main__':
     main()
