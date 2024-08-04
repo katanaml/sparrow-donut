@@ -1,20 +1,43 @@
+# tools/donut/dataset_generator.py
+
 from pathlib import Path
 import random
-from datasets import load_dataset
-
+from datasets import Dataset, DatasetDict
+import json
 
 class DonutDatasetGenerator:
     def generate(self, data_dir):
-        # define paths
-        img_dir_path = Path(data_dir).joinpath("img")
+        img_dir = Path(data_dir) / "img"
+        dataset_dict = DatasetDict()
+        
+        for split in ['train', 'validation', 'test']:
+            split_dir = img_dir / split
+            metadata_file = split_dir / "metadata.jsonl"
+            
+            if split_dir.exists() and metadata_file.exists():
+                with open(metadata_file, 'r') as f:
+                    metadata = [json.loads(line) for line in f]
+                
+                dataset = Dataset.from_dict({
+                    'image': [str(split_dir / item['file_name']) for item in metadata],
+                    'ground_truth': [item['ground_truth'] for item in metadata]
+                })
+                
+                dataset_dict[split] = dataset
+                print(f"{split.capitalize()} set has {len(dataset)} images")
+            else:
+                print(f"Directory or metadata file not found for {split} set")
+        
+        if dataset_dict:
+            print(f"Dataset features are: {next(iter(dataset_dict.values())).features.keys()}")
+            
+            if 'train' in dataset_dict and dataset_dict['train']:
+                train_dataset = dataset_dict['train']
+                random_sample = random.choice(range(len(train_dataset)))
+                print(f"Random sample from training set:")
+                print(f"Image path: {train_dataset[random_sample]['image']}")
+                print(f"Ground truth: {train_dataset[random_sample]['ground_truth']}")
+        else:
+            print("No datasets were loaded")
 
-        # Load dataset
-        dataset = load_dataset("imagefolder", data_dir=img_dir_path, split="train")
-
-        print(f"Dataset has {len(dataset)} images")
-        print(f"Dataset features are: {dataset.features.keys()}")
-
-        random_sample = random.randint(0, len(dataset) - 1)
-        print(f"Random sample is {random_sample}")
-        print(f"OCR text is {dataset[random_sample]['ground_truth']}")
-
+        return dataset_dict
